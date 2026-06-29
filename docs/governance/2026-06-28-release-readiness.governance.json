@@ -1,0 +1,69 @@
+{
+  "task_id": "2026-06-28-release-readiness",
+  "project_id": "git-release-manager",
+  "profile": "internal",
+  "mode": "standard",
+  "execution_scope": "local_only",
+  "verification_owner": "model",
+  "risk_score": {
+    "data_impact": 1,
+    "user_business_impact": 2,
+    "change_complexity": 1,
+    "dependency_runtime_uncertainty": 1,
+    "recoverability": 1,
+    "total": 6
+  },
+  "critical_override": false,
+  "skills_in_use": [
+    "token-reduction",
+    "order-of-operations",
+    "skill-governance",
+    "regression-prevention",
+    "scripted-command-execution",
+    "doc-maintenance",
+    "user-instructions-tracker"
+  ],
+  "required_gates": [
+    {
+      "name": "release_script_added",
+      "status": "passed",
+      "evidence": "package.json defines npm run release:check"
+    },
+    {
+      "name": "release_notes_current",
+      "status": "passed",
+      "evidence": "CHANGELOG.md documents 0.1.0 release candidate"
+    },
+    {
+      "name": "release_runbook_current",
+      "status": "passed",
+      "evidence": "docs/release.md documents validation, tag, release, and rollback commands"
+    },
+    {
+      "name": "automated_release_check",
+      "status": "passed",
+      "evidence": "npm run release:check passed on 2026-06-29T03:20:22Z: syntax checks passed, 16 node tests passed, 1 Playwright test passed, screenshots captured, packaged-directory build passed, npm audit found 0 vulnerabilities"
+    },
+    {
+      "name": "browser_e2e",
+      "status": "passed",
+      "evidence": "npm run test:e2e passed for beginner auth, grouped navigation, release segment, and Advanced preview"
+    },
+    {
+      "name": "screenshot_evidence",
+      "status": "passed",
+      "evidence": "docs/screenshots contains Home auth-needed, Home auth-ready, Work Releases, Advanced preview, and Settings screenshots"
+    },
+    {
+      "name": "packaged_directory_build",
+      "status": "passed",
+      "evidence": "npm run package:dir produced dist/linux-unpacked"
+    }
+  ],
+  "recommendation": "go-with-risk",
+  "residual_risks": [
+    "Signed platform installers are not produced yet.",
+    "One-click dependency installation is not fully implemented.",
+    "No usable Git remote is configured in this workspace yet."
+  ]
+}

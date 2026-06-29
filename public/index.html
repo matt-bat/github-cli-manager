@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GitHub CLI Manager</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <button class="home-anchor" id="homeAnchor" type="button" aria-label="Go to Home">
+          <span class="mark">gh</span>
+          <span>
+            <strong>GitHub CLI Manager</strong>
+            <small>Local command workspace</small>
+          </span>
+        </button>
+        <label class="repo-field">
+          <span>Repository</span>
+          <input id="repoInput" placeholder="OWNER/REPO" autocomplete="off">
+        </label>
+        <label class="repo-field">
+          <span>Working Directory</span>
+          <input id="cwdInput" placeholder="/path/to/local/repo" autocomplete="off">
+        </label>
+        <button id="refreshSetup" class="secondary" type="button">Recheck</button>
+      </header>
+
+      <main class="workspace">
+        <nav class="tabs" role="tablist" aria-label="Primary workspace">
+          <button class="tab active" id="tab-home" data-tab="home" type="button" role="tab" aria-selected="true" aria-controls="home">Home</button>
+          <button class="tab" id="tab-work" data-tab="work" type="button" role="tab" aria-selected="false" aria-controls="work">Work</button>
+          <button class="tab" id="tab-repository" data-tab="repository" type="button" role="tab" aria-selected="false" aria-controls="repository">Repository</button>
+          <button class="tab" id="tab-automation" data-tab="automation" type="button" role="tab" aria-selected="false" aria-controls="automation">Automation</button>
+          <button class="tab" id="tab-security" data-tab="security" type="button" role="tab" aria-selected="false" aria-controls="security">Security</button>
+          <button class="tab" id="tab-explore" data-tab="explore" type="button" role="tab" aria-selected="false" aria-controls="explore">Explore</button>
+          <button class="tab" id="tab-advanced" data-tab="advanced" type="button" role="tab" aria-selected="false" aria-controls="advanced">Advanced</button>
+          <button class="tab" id="tab-activity" data-tab="activity" type="button" role="tab" aria-selected="false" aria-controls="activity">Activity</button>
+          <button class="tab" id="tab-settings" data-tab="settings" type="button" role="tab" aria-selected="false" aria-controls="settings">Settings</button>
+        </nav>
+
+        <section class="panel active" id="home" role="tabpanel" aria-labelledby="tab-home">
+          <div class="dashboard">
+            <section class="surface setup-surface">
+              <div class="section-title">
+                <div>
+                  <p class="eyebrow">Readiness</p>
+                  <h1>Setup</h1>
+                </div>
+                <span id="setupSummary" class="badge">Checking</span>
+              </div>
+              <div id="authFlowPanel" class="auth-flow"></div>
+              <div id="setupCards" class="setup-steps"></div>
+            </section>
+            <section class="surface">
+              <div class="section-title">
+                <div>
+                  <p class="eyebrow">Context</p>
+                  <h1>Current Workspace</h1>
+                </div>
+                <span id="contextBadge" class="badge warn">Needs repo</span>
+              </div>
+              <div id="contextPanel" class="context-panel"></div>
+            </section>
+            <section class="surface wide">
+              <div class="section-title">
+                <div>
+                  <p class="eyebrow">Start Here</p>
+                  <h1>Next Actions</h1>
+                </div>
+                <span class="badge">Guided</span>
+              </div>
+              <div id="quickActions" class="command-list"></div>
+            </section>
+            <section class="surface">
+              <div class="section-title">
+                <div>
+                  <p class="eyebrow">Session</p>
+                  <h1>Recent Activity</h1>
+                </div>
+                <button id="homeActivityLink" class="secondary" type="button">View all</button>
+              </div>
+              <div id="activitySummary" class="activity-summary"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="panel" id="work" role="tabpanel" aria-labelledby="tab-work" hidden>
+          <div class="surface">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">Daily Work</p>
+                <h1>Issues, Pull Requests, and Releases</h1>
+              </div>
+              <span class="badge">Guided + Catalog</span>
+            </div>
+            <div class="segment-row" role="tablist" aria-label="Work domains">
+              <button class="segment active" data-segment-group="work" data-segment-target="pull-requests" type="button">Pull Requests</button>
+              <button class="segment" data-segment-group="work" data-segment-target="issues" type="button">Issues</button>
+              <button class="segment" data-segment-group="work" data-segment-target="releases" type="button">Releases</button>
+            </div>
+            <section class="domain-section active" data-segment-panel="work" id="pull-requests"><div class="command-list" data-domain="Pull Requests"></div></section>
+            <section class="domain-section" data-segment-panel="work" id="issues" hidden><div class="command-list" data-domain="Issues"></div></section>
+            <section class="domain-section" data-segment-panel="work" id="releases" hidden><div class="command-list" data-domain="Releases"></div></section>
+          </div>
+        </section>
+
+        <section class="panel" id="repository" role="tabpanel" aria-labelledby="tab-repository" hidden>
+          <div class="surface">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">Repository</p>
+                <h1>Repo Commands</h1>
+              </div>
+              <span class="badge">Guided + Catalog</span>
+            </div>
+            <div class="command-list" data-domain="Repository"></div>
+          </div>
+        </section>
+
+        <section class="panel" id="automation" role="tabpanel" aria-labelledby="tab-automation" hidden>
+          <div class="surface">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">Automation</p>
+                <h1>Actions, Projects, and Codespaces</h1>
+              </div>
+              <span class="badge">Operational</span>
+            </div>
+            <div class="segment-row" role="tablist" aria-label="Automation domains">
+              <button class="segment active" data-segment-group="automation" data-segment-target="actions" type="button">Actions</button>
+              <button class="segment" data-segment-group="automation" data-segment-target="projects" type="button">Projects</button>
+              <button class="segment" data-segment-group="automation" data-segment-target="codespaces" type="button">Codespaces</button>
+            </div>
+            <section class="domain-section active" data-segment-panel="automation" id="actions"><div class="command-list" data-domain="Actions"></div></section>
+            <section class="domain-section" data-segment-panel="automation" id="projects" hidden><div class="command-list" data-domain="Projects"></div></section>
+            <section class="domain-section" data-segment-panel="automation" id="codespaces" hidden><div class="command-list" data-domain="Codespaces"></div></section>
+          </div>
+        </section>
+
+        <section class="panel" id="security" role="tabpanel" aria-labelledby="tab-security" hidden>
+          <div class="surface">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">Sensitive</p>
+                <h1>Security Commands</h1>
+              </div>
+              <span class="badge warn">Review required</span>
+            </div>
+            <div class="command-list" data-domain="Security"></div>
+          </div>
+        </section>
+
+        <section class="panel" id="explore" role="tabpanel" aria-labelledby="tab-explore" hidden>
+          <div class="surface">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">Explore</p>
+                <h1>Gists and Search</h1>
+              </div>
+              <span class="badge">Catalog</span>
+            </div>
+            <div class="segment-row" role="tablist" aria-label="Explore domains">
+              <button class="segment active" data-segment-group="explore" data-segment-target="gists" type="button">Gists</button>
+              <button class="segment" data-segment-group="explore" data-segment-target="search" type="button">Search</button>
+            </div>
+            <section class="domain-section active" data-segment-panel="explore" id="gists"><div class="command-list" data-domain="Gists"></div></section>
+            <section class="domain-section" data-segment-panel="explore" id="search" hidden><div class="command-list" data-domain="Search"></div></section>
+          </div>
+        </section>
+
+        <section class="panel" id="advanced" role="tabpanel" aria-labelledby="tab-advanced" hidden>
+          <div class="surface advanced-grid">
+            <div class="advanced-compose">
+              <div class="section-title">
+                <div>
+                  <p class="eyebrow">Expert</p>
+                  <h1>Advanced Runner</h1>
+                </div>
+                <span class="badge warn">gh + safe git only</span>
+              </div>
+              <label class="stacked">
+                <span>Command</span>
+                <textarea id="advancedArgs" spellcheck="false" placeholder="gh repo view cli/cli --json name,description"></textarea>
+              </label>
+              <label class="confirm-row">
+                <input type="checkbox" id="confirmRun">
+                <span>I reviewed this command and want to run it locally.</span>
+              </label>
+              <div class="button-row">
+                <button id="previewAdvanced" class="secondary" type="button">Preview</button>
+                <button id="runAdvanced" type="button">Run</button>
+              </div>
+              <label class="stacked command-search">
+                <span>Find a gh command</span>
+                <input id="commandSearch" placeholder="Search command catalog">
+              </label>
+              <div id="commandSearchResults" class="compact-list"></div>
+            </div>
+            <div class="review-column">
+              <div id="advancedPreview" class="review-panel">
+                <p class="empty-state">Preview a command before running it.</p>
+              </div>
+              <output id="advancedOutput" class="output-box"></output>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" id="activity" role="tabpanel" aria-labelledby="tab-activity" hidden>
+          <div class="surface">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">Local Audit</p>
+                <h1>Activity</h1>
+              </div>
+              <button id="refreshActivity" class="secondary" type="button">Refresh</button>
+            </div>
+            <div id="activityList" class="activity-list"></div>
+          </div>
+        </section>
+
+        <section class="panel" id="settings" role="tabpanel" aria-labelledby="tab-settings" hidden>
+          <div class="surface">
+            <div class="section-title">
+              <div>
+                <p class="eyebrow">Local</p>
+                <h1>Settings</h1>
+              </div>
+              <span class="badge">Desktop only</span>
+            </div>
+            <div class="settings-grid">
+              <section>
+                <h2>Setup</h2>
+                <p>Run setup checks any time after installing GitHub CLI, Git, or updating PATH.</p>
+                <button id="settingsRecheck" type="button">Run setup checks</button>
+              </section>
+              <section>
+                <h2>Command Policy</h2>
+                <p>Only gh and approved read-only git commands run. Use Working Directory instead of cd. No shell interpolation or terminal windows.</p>
+              </section>
+              <section>
+                <h2>Command Catalog</h2>
+                <p id="catalogCount">Loading command catalog.</p>
+              </section>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>

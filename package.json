@@ -1,0 +1,74 @@
+{
+  "name": "github-cli-manager",
+  "version": "0.1.0",
+  "private": true,
+  "author": "GitHub CLI Manager contributors",
+  "license": "MIT",
+  "type": "module",
+  "description": "Local-only GitHub CLI manager that executes approved gh and read-only git commands silently through a guided UI.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matt-bat/github-cli-manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/matt-bat/github-cli-manager/issues"
+  },
+  "homepage": "https://github.com/matt-bat/github-cli-manager#readme",
+  "keywords": [
+    "github-cli",
+    "github",
+    "gh-cli",
+    "electron",
+    "desktop-app",
+    "release-manager",
+    "developer-tools",
+    "local-first",
+    "git"
+  ],
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "check": "node --check src/main.js && node --check src/command-runner.js && node --check src/command-catalog.js && node --check src/setup.js && node --check public/app.js",
+    "test": "node --test",
+    "test:e2e": "playwright test",
+    "screenshots:capture": "node scripts/capture-screenshots.mjs",
+    "package:dir": "electron-builder --dir --publish never",
+    "release:check": "npm run check && npm test && npm run test:e2e && npm run screenshots:capture && npm run package:dir && npm audit --audit-level=moderate"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "build": {
+    "appId": "local.github-cli-manager",
+    "productName": "GitHub CLI Manager",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "public/**/*",
+      "docs/**/*",
+      "README.md",
+      "CHANGELOG.md",
+      "package.json"
+    ],
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Development"
+    }
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "electron": "^42.5.0",
+    "electron-builder": "^26.15.3"
+  }
+}
