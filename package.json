@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "author": "GitHub CLI Manager contributors",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "description": "Local-only GitHub CLI manager that executes approved gh and read-only git commands silently through a guided UI.",
   "repository": {
