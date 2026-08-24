@@ -2,12 +2,23 @@
 
 Clean, local-only desktop app for managing GitHub operations through silently executed GitHub CLI (`gh`) and approved read-only Git backend commands.
 
+> Like this project? You can [support ongoing development on Ko-fi](https://ko-fi.com/matt0bat), helping me maintain existing tools and release more public projects.
+
 ## Purpose
 
 GitHub CLI Manager gives non-expert and expert maintainers a simple local workspace for repository, pull request, issue, release, Actions, secrets, variables, project, codespace, gist, key, search, API, extension, alias, and configuration work without memorizing `gh` commands or opening a terminal.
 
 The MVP is specified in [docs/mvp-spec.md](docs/mvp-spec.md), with command-by-command coverage in [docs/gh-command-coverage.md](docs/gh-command-coverage.md).
 Release readiness is documented in [docs/release.md](docs/release.md), with notes in [CHANGELOG.md](CHANGELOG.md).
+
+## How the backend works
+
+1. The Electron renderer converts a user action into a typed request without constructing shell commands.
+2. The main process validates repository identifiers and arguments, assigns a risk level, and returns a redacted preview.
+3. After any required confirmation, the command runner invokes only approved `gh` or read-only `git` commands as argument arrays, without shell interpolation.
+4. The local GitHub CLI uses the user’s existing authentication, and structured results return to the renderer and local activity history.
+
+There is no AI backend, model inference, training pipeline, cloud command relay, or hosted execution service. All command validation and execution are deterministic and local to the desktop app.
 
 ## Screenshots
 
